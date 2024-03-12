@@ -3,9 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Mercado</title>
 </head>
 <body>
-    
+    <header>
+        <a class="logo_bianca" href="#">
+            <img src="assets/logo.png" alt="">
+            <p>Bianca Barcelos</p>
+        </a>
+        <div id="pesquisaBox">
+            <form id="formPesquisa">
+                <input type="text" name="pesquisa" id="pesquisa" placeholder="O que você deseja encontrar?">
+                <button class="btnPesquisa" type="submit"> <img src="assets/lupaPesquisa.png" title="pesquisar"></button>
+            </form>
+            <a href="#" onclick="limpaPesquisa(event)"><img src="assets/produtos.png" title="limpar busca"></a>
+        </div>
+    </header>
+    <section>
+        <div class="listaProdutos">
+            
+        </div>
+        <div class="carrinho">
+            <div class="listaCompra">
+                <img id="carrinhoVazio" src="assets/carrinhoVazio.svg" alt="">
+            </div>
+            <div class="resumoCompra">
+                <h2>TOTAL</h2>
+                <h2 id="valorTotal">R$ 0,00</h2>
+            </div>
+            <button class="btn">COMPRAR</button>
+        </div>
+    </section>
+    <script src="script.js"></script>
 </body>
 </html>

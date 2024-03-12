@@ -1,0 +1,169 @@
+:root {
+    --bg : #E8751A;
+    --btn_acao : #898121;
+    --txt_principal : #301E01;
+    --txt_secundario : #FDA403;
+    --bg-secundario : #E5C287;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", sans-serif;
+    color: var(--txt_principal);
+    font-size: 20px;
+}
+body {
+    background-color: var(--bg);
+    padding: 20px 50px;
+}
+header {
+    display: flex;
+    height: 100px;
+
+    & .logo_bianca {
+        gap: 20px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        text-decoration: none;
+        & img{
+            width: 30px;
+            filter: invert(1);
+        }
+    }
+    & #pesquisaBox, form {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        
+        & #pesquisa {
+            height: 40px;
+            width: 400px;
+            padding: 0 15px;
+            border-radius: 10px;
+            border: 0;
+            background-color: var(--bg-secundario);
+            color: var(--txt_principal);
+
+            &::placeholder {
+                color: var(--txt_principal);
+            }
+        }
+        & .btnPesquisa {
+            height: 40px;
+            width: 40px;
+            background-color: transparent;
+            border: 0;
+            cursor: pointer;
+            & img {
+                transform: scale(.8);
+            }
+        }
+    }
+}
+section {
+    display: flex;
+    height: calc(100vh - 100px - 40px);
+    & .cardProduto {
+        display: flex;
+        justify-content: space-between;
+        background-color: var(--bg-secundario);
+        border: 2px solid var(--btn_acao);
+        padding: 20px;
+        border-radius: 10px;
+        &:not(:last-child) {
+            margin-bottom: 9px;
+        }
+        & .produtoInfo {
+            display: flex;
+            gap: 20px;
+            & img {
+                width: 100px;
+            }
+            & .produtoDescricao {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                & .nomeProduto {
+                    font-weight: 900;
+                }
+                & .codigoBarra {
+                    opacity: .7;
+                }
+            }
+        }
+        & .produtoValorBtn {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            & .valorProduto {
+                font-weight: 900;
+                font-size: 35px;
+                text-align: end;
+            }
+            & .btnAddCarrinho {
+                padding: 10px;
+                border-radius: 10px;
+                background-color: var(--btn_acao);
+                border: 0;
+                color: #E5C287;
+                font-weight: 700;
+            }
+        }
+    }
+    & .listaProdutos {
+        width: 70%;
+        padding: 0 5px;
+        overflow-y: auto;
+        &::-webkit-scrollbar {width: 10px;}
+        &::-webkit-scrollbar-track { background-color: var(--bg);}
+        &::-webkit-scrollbar-thumb {background-color: var(--btn_acao); border-radius: 20px; }
+    
+    }
+    & .carrinho {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 30%;
+        padding: 0 5px;
+        height: initial;
+        & .listaCompra {
+            border: 2px solid var(--btn_acao);
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--bg-secundario);    
+            height: calc(100% - 160px);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            & #carrinhoVazio {
+                width: 300px;
+                align-self: center;
+                margin: auto;
+                transform: translateY(-20px);
+            }
+        }
+        & .resumoCompra {
+            display: flex;
+            justify-content: space-between;
+            border: 2px solid var(--btn_acao);
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--bg-secundario);            
+        }
+        & .btn {
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--btn_acao);
+            border: 0;
+            color: #E5C287;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+    }
+}
