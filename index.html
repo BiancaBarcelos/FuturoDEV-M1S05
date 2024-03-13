@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <a class="logo_bianca" href="#">
+        <a class="logo_bianca" target="_blank" href="https://github.com/BiancaBarcelos">
             <img src="assets/logo.png" alt="">
             <p>Bianca Barcelos</p>
         </a>
@@ -21,18 +21,16 @@
         </div>
     </header>
     <section>
-        <div class="listaProdutos">
-            
-        </div>
+        <div class="listaProdutos rolagemCustom"></div>
         <div class="carrinho">
-            <div class="listaCompra">
+            <div class="listaCompra rolagemCustom">
                 <img id="carrinhoVazio" src="assets/carrinhoVazio.svg" alt="">
             </div>
             <div class="resumoCompra">
                 <h2>TOTAL</h2>
                 <h2 id="valorTotal">R$ 0,00</h2>
             </div>
-            <button class="btn">COMPRAR</button>
+            <button onclick="comprar()" id="btnComprar" class="btn">COMPRAR</button>
         </div>
     </section>
     <script src="script.js"></script>

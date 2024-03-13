@@ -71,9 +71,20 @@ let itens_supermercado = [
     }
   ]
 
+let carrinhoStorage = localStorage.getItem("carrinho");
+let carrinhoCliente = [];
 let form = document.getElementById('formPesquisa');
 let inputPesquisa = document.getElementById('pesquisa');
 let listaProdutosBox = document.querySelector(".listaProdutos");
+let listaCompraBox = document.querySelector(".listaCompra");
+let imgCarrinhoVazio = document.getElementById('carrinhoVazio');
+let totalCarrinho = document.getElementById('valorTotal');
+let btnComprar = document.getElementById('btnComprar');
+  
+if (carrinhoStorage && carrinhoStorage.length > 0) {
+  carrinhoCliente = JSON.parse(carrinhoStorage);
+  validaCarrinho(carrinhoCliente);
+}
 
 function limpaPesquisa(event) {
     event.preventDefault();
@@ -92,14 +103,16 @@ form.addEventListener('submit' , function(e) {
 
         for (let i= 0; i<itens_supermercado.length; i++) {
             let nomeProduto = itens_supermercado[i].nome.toLowerCase();
+            let nomeNormalizado = nomeProduto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            let pesquisaProduto = inputPesquisa.value.toLowerCase();
+            let pesquisaNormalizada = pesquisaProduto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
 
             if (inputPesquisa.value.length === 13 && itens_supermercado[i].codigo_barras === parseInt(inputPesquisa.value) ) {
                 //pesquisa por código de barras
                 arrayPesquisado = [...arrayPesquisado, itens_supermercado[i]];
-                console.log(inputPesquisa.value, arrayPesquisado)
                 renderizaProdutos(arrayPesquisado);
                 return;
-            }else if (nomeProduto.includes(inputPesquisa.value.toLowerCase())) {
+            }else if (nomeNormalizado.includes(pesquisaNormalizada)) {
                 //pesquisa por nome
                 arrayPesquisado = [...arrayPesquisado, itens_supermercado[i]];
                 renderizaProdutos(arrayPesquisado);
@@ -140,9 +153,97 @@ function renderizaProdutos(pesquisa) {
                             </div>
                             <div class="produtoValorBtn">
                                 <p class="valorProduto">${valorReal}</p>
-                                <button class="btnAddCarrinho">ADICIONAR AO CARRINHO</button>
+                                <button onclick="addToCart(${item.codigo_barras})" class="btnAddCarrinho">ADICIONAR AO CARRINHO</button>
                             </div>
                         </div> `
         listaProdutosBox.insertAdjacentHTML('beforeend' , produto);
     })
 }
+
+function addToCart(codigo_barras) {
+  itens_supermercado.find((element) => { 
+    if (codigo_barras === element.codigo_barras) {
+      carrinhoCliente = [...carrinhoCliente, element];
+      renderizaCarrinho(carrinhoCliente);
+      localStorage.setItem("carrinho", JSON.stringify(carrinhoCliente));
+    }
+  })
+  calcularTotal(carrinhoCliente);
+}
+
+function removeItem(i) {
+  listaCompraBox.innerHTML = '';
+  
+  carrinhoCliente.splice(i, 1);
+  localStorage.removeItem("carrinho");
+  localStorage.setItem("carrinho", JSON.stringify(carrinhoCliente));
+
+  validaCarrinho(carrinhoCliente);
+
+  calcularTotal(carrinhoCliente);
+}
+
+function renderizaCarrinho(carrinho) {
+  listaCompraBox.innerHTML = '';
+  calcularTotal(carrinho);
+  
+  carrinho.map((item, index) => {
+    let valorProduto = String(item.valor);
+    let valorReal = 'R$ ' + valorProduto.replace('.', ','); 
+    let cardCarrinho = ` <div class="cardProdutoCart">
+                            <div class="produtoInfo">
+                                <img src="${item.imagem}" alt="">
+                                <div class="produtoDescricao">
+                                    <div>
+                                        <h3 class="nomeProduto">${item.nome}</h3>
+                                        <p class="codigoBarra">${item.codigo_barras}</p>
+                                    </div>
+                                    <p class="valorProduto">${valorReal}</p>
+                                </div>
+                            </div>
+                            <button onclick="removeItem(${index})" title="Remover Item" class="btnRemoveItem">-</button>
+                          </div>`
+    listaCompraBox.insertAdjacentHTML('beforeend', cardCarrinho);
+  })
+}
+
+function validaCarrinho(carrinho) {
+  if (carrinho.length > 0) {
+    renderizaCarrinho(carrinho);
+    imgCarrinhoVazio.classList.add('hide');
+
+  }else {
+    listaCompraBox.innerHTML = `<img id="carrinhoVazio" src="assets/carrinhoVazio.svg" alt="">`;
+  }
+}
+
+function calcularTotal(produtos) {
+  let total = 0;
+  let valorCarrinho;
+  let valorReal = '';
+
+  produtos.map( produto => {
+    total = total + produto.valor;
+  })
+  
+  valorCarrinho = String(total.toFixed(2));
+  valorReal = 'R$ ' + valorCarrinho.replace('.', ',');
+
+  totalCarrinho.innerText = `${valorReal}`;
+}
+
+function comprar(){
+  let carrinhoFinal = JSON.parse(localStorage.getItem('carrinho'));
+
+  if (carrinhoFinal && carrinhoFinal.length > 0) {
+    listaCompraBox.innerHTML = '';
+    carrinhoCliente = [];
+    localStorage.removeItem('carrinho');
+    calcularTotal([]);
+    listaCompraBox.innerHTML = `<img id="carrinhoVazio" src="assets/carrinhoVazio.svg" alt="">`;
+    setTimeout(() => {alert('Sua compra foi finalizada com sucesso!')}, 200)
+  } else {
+    alert('Adicione produtos no carrinho!');
+  }
+}
+
